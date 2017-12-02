@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0 auto;
+      padding: 0px;
+      font-size: 12px;
+      background: url(images/bg.gif) repeat center 36px;
+      text-align: center;
+      background-color: #c30230;
+    }
+
+    #content {
+      margin: 0 auto;
+      width: 960px;
+      background: url(images/content_bg.jpg) no-repeat left top;
+      height: 627px;
+      position: relative;
+    }
+
+    #content .tip1, #content .tip2, #content .tip3, #content .tip4, #content .tip5, #content .tip6, #content .tip7, #content .tip8 {
+      position: absolute;
+      width: 227px;
+      left: 200px;
+      top: 100px;
+    }
+
+    #content .tip1 .tip_h {
+      background: url(images/tip1_h.gif) no-repeat left top;
+    }
+
+    #content .tip1 .tip_h, #content .tip2 .tip_h, #content .tip3 .tip_h, #content .tip4 .tip_h, #content .tip5 .tip_h, #content .tip6 .tip_h, #content .tip7 .tip_h, #content .tip8 .tip_h {
+      width: 227px;
+      padding-top: 45px;
+      height: 23px;
+      text-align: left;
+      cursor: move;
+    }
+
+    #content .tip1 .tip_c {
+      background: url(images/tip1_c.gif) repeat-y;
+    }
+
+    #content .tip1 .tip_c, #content .tip2 .tip_c, #content .tip3 .tip_c, #content .tip4 .tip_c, #content .tip5 .tip_c, #content .tip6 .tip_c, #content .tip7 .tip_c, #content .tip8 .tip_c {
+      width: 200px;
+      padding-left: 12px;
+      padding-right: 15px;
+      min-height: 40px;
+      text-align: left;
+      line-height: 20px;
+      max-height: 160px;
+      word-wrap: break-word;
+      word-break: break-all;
+      overflow: hidden;
+    }
+
+    #content .tip1 .tip_f {
+      background: url(images/tip1_f.gif) no-repeat left top;
+    }
+
+    #content .tip1 .tip_f, #content .tip2 .tip_f, #content .tip3 .tip_f, #content .tip4 .tip_f, #content .tip5 .tip_f, #content .tip6 .tip_f, #content .tip7 .tip_f, #content .tip8 .tip_f {
+      width: 227px;
+      height: 53px;
+      padding-top: 20px;
+    }
+
+    #content .close, #content .close2 {
+      float: left;
+      font-size: 12px;
+      cursor: pointer;
+      color: #000000;
+    }
+
+    .clr {
+      clear: both;
+      overflow: auto;
+      display: block;
+      height: 0px;
+    }
+
+    #content .icon {
+      float: left;
+      width: 35px;
+      padding-left: 15px;
+      height: 35px;
+      text-align: center;
+    }
+
+    #content .name {
+      float: right;
+      padding-right: 15px;
+      text-align: right;
+      font-size: 14px;
+      line-height: 35px;
+      color: #C0F;
+    }
+
+    #content .num {
+      float: left;
+      padding-left: 7px;
+      width: 195px;
+    }
+
+    #btn {
+      width: 140px;
+      height: 60px;
+      font-size: 20px;
+      position: fixed;
+      top: 200px;
+      left: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: yellowgreen;
+    }
+  </style>
+</head>
+<body>
+<button id="btn">显示小纸条</button>
+<!--纸条墙-->
+<div id="content">
+  <div class="tip1" id="tip1" style="left: 152px; top: 143px;">
+      <div class="tip_h" title="双击关闭纸条">
+          <div class="num">2016-02-17 00:00:00</div>
+          <div class="close" title="关闭纸条">×</div>
+          <div class="clr"></div>
+      </div>
+      <div class="tip_c">今天你拿苹果支付了么</div>
+      <div class="tip_f">
+          <div class="icon"><img src="images/bpic_1.gif" alt="" title=""></div>
+          <div class="name">mahu</div>
+          <div class="clr"></div>
+      </div>
+  </div>
+</div>
+</body>
+<script src=myTool.js></script>
+<script>
+//  分析功能： 单击按钮 生成很多个小纸条（div）:每个小字条都是一个对象
+//  1.先从数据库中获取一些数据
+var data = [
+  {"id": 11, "name": "mahu", "content": "今天你拿苹果支付了么", "time": "2016-02-17 00:00:00"},
+  {"id": 22, "name": "haha", "content": "今天天气不错，风和日丽的", "time": "2016-02-18 12:40:00"},
+  {"id": 3, "name": "jjjj", "content": "常要说的事儿是乐生于苦", "time": "2016-03-18 12:40:00"},
+  {"id": 4, "name": "9.8的妹纸", "content": "把朋友家厕所拉堵了 不敢出去 掏了半小时了都", "time": "2016-03-18 12:40:00"},
+  {"id": 5, "name": "雷锋ii.", "content": "元宵节快乐", "time": "2016-02-22 12:40:00"},
+  {"id": 6, "name": "哎呦哥哥.", "content": "据说今晚央视的元宵晚会导演和春晚导演是同一个人，真是躲得过初一，躲不过十五。", "time": "2016-02-22 01:30:00"},
+  {"id": 7,"name": "没猴哥，不春晚","content": "班主任:“小明，你都十二岁了，还是三年级，不觉得羞愧吗”？。小明:“一点也不觉得，老师你都四十多岁了，不也是年年在三年级混日子吗？羞愧的应该是你”。老师:……", "time": "2016-02-22 01:30:00"},
+  {"id": 8, "name": "哎呦杰杰.", "content": "真搞不懂你们地球人，月亮有什么好看的，全是坑，还是对面那哥们好看，", "time": "2016-02-22 01:30:00"},
+  {"id": 9, "name": "哎呦哎呦", "content": "今天哪里的烟花最好看！！？答：朋友圈。。。", "time": "2016-02-22 02:30:00"}
+];
+var oBtn =$("#btn");
+var oCon = $("#content");
+
+//2.单击按钮 生成多个小纸条
+oBtn.onclick=function () {
+  oCon.innerHTML="";                                    //生成小纸条前先清除#content已有的内容（id="tip1"的小纸条）
+  for(var i=0;i<data.length;i++){                      //循环生成多个小纸条：
+    var oDiv = document.createElement("div");           //每次循环创建一个div,(每个小字条占用一个块)
+    oDiv.className="tip1";                       //给每个divt添加类名，id名,这里让每个div的类名都是"tip1"
+    oDiv.id="tip"+i;                    //div的ID名；(data.id:数组中第i项的ID比如第一项的ID是1)
+
+
+    oDiv.innerHTML='<div class="tip_h" title="双击关闭纸条">'+            //将内部结构（每个字条的内容结构）进行字符串拼接 并将数据写入
+      '<div class="num">'+data[i].time+'</div>'+             //data[i].time数组中第i项的time属性
+      '<div class="close" title="关闭纸条">×</div>'+
+      '<div class="clr"></div>'+
+      '</div>'+
+      '<div class="tip_c">'+data[i].content+'</div>'+
+      '<div class="tip_f">'+
+      '<div class="icon"><img src="images/bpic_1.gif" alt="" title=""></div>'+
+      '<div class="name">'+data[i].name+'</div>'+
+      '<div class="clr"></div>'+
+      '</div>';
+// 在墙里面（集合oCon中 随机按安排div位置 ：left 和top
+    var left = Math.round(Math.random()*700);  var top =  Math.round(Math.random()*400);
+
+    // 将随机的结果赋给生成的某个div小纸条
+    oDiv.style.left=left+"px";    oDiv.style.top=top+"px";
+    oCon.appendChild(oDiv);      // 将div小纸条放入集合oCon中
+
+    var myIndex=1;    //作为层级属性值用来记录每个div的层数
+    oDiv.onclick=function () {
+      //单击以后让它的层级 等于myIndex
+      this.style.zIndex = myIndex;       //zIndex层级属性
+      //让myIndex增加一个
+      myIndex++;
+    }
+
+    var aClose = $(".close",oCon);            //从整个页面所有的小纸条里获取close 关闭按钮
+    for(var i=0;i<aClose.length;i++){
+      //给所有的关闭按钮 添加单击事件
+      aClose[i].onclick=function () {               //this:aClose[i]; this.parentNode:aClose[i]所在的父元素
+        //让ocon去移出里面的 关闭按的对应的小纸条       //this.parentNode.parentNode:某一个小div
+        oCon.removeChild(this.parentNode.parentNode); //removeChild()用来删除父节点的一个子节点
+      }
+    }
+
+    // 从整个页面小纸条中 获取所有的tip_h 添加双击事件
+    var oTip_h = $(".tip_h",oCon);
+    for(var i=0;i<oTip_h.length;i++){
+      oTip_h[i].ondblclick=function () {
+        oCon.removeChild(this.parentNode);
+      }
+    }
+  }
+}
+</script>
+</html>
