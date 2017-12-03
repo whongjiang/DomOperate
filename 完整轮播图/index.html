@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>轮播图</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <div class="all" id='box'>
+    <div class="screen">
+      <ul>
+        <li><img src="images/1.jpg" width="500" height="200"/></li>
+        <li><img src="images/2.jpg" width="500" height="200"/></li>
+        <li><img src="images/3.jpg" width="500" height="200"/></li>
+        <li><img src="images/4.jpg" width="500" height="200"/></li>
+        <li><img src="images/5.jpg" width="500" height="200"/></li>
+      </ul>
+      <ol>
+      </ol>
+    </div>
+    <div id="arr"><span id="left">&lt;</span><span id="right">&gt;</span></div>
+  </div>
+  <script>
+    // 0.获取要操作的元素
+    var box = document.getElementById("box");
+    var screen = box.children[0];
+    var ul = screen.children[0];
+    var ol = screen.children[1];
+    var ulLis = ul.children;//所有的图片
+
+
+    //1.动态生成结构(图片和对应的按钮)
+    for (var i = 0; i < ulLis.length; i++) {
+      //动态生成按钮(每一个小按钮都是一个li标签)
+      var li = document.createElement("li");
+      //给li添加序号=索引号+1
+      li.innerHTML = i + 1;
+      //追加到ol下面
+      ol.appendChild(li);
+    }
+    var olLis = ol.children;
+    olLis[0].className = "current";
+
+
+    //2.鼠标经过按钮(显示对应的图片)
+    var imgWidth = screen.offsetWidth;
+    for (var j = 0; j < olLis.length; j++) {
+      olLis[j].index = j;
+      olLis[j].onmouseover = function () {
+        for (var k = 0; k < olLis.length; k++) {
+           olLis[k].className = "";
+        }
+        this.className = "current";
+
+        //图片向左移动时目标距离target和 当前按钮索引号 和 图片宽度有关 
+        var target = -this.index* imgWidth;
+        // console.log(target);    
+        animate(ul, target);
+      }
+    }
+
+
+
+    //3.鼠标点击左右箭头
+     var arrRight = document.getElementById("right");
+     var arrLeft = document.getElementById("left");
+     var timer = null;
+
+    // 3.1鼠标经过box显示arr 
+    box.onmouseover = function () {
+      arr.style.display = "block";
+      clearInterval(timer);
+    }
+    // 3.2鼠标离开box隐藏arr 设置定时器继续自动播放
+    box.onmouseout = function () {
+      arr.style.display = "none";
+      timer = setInterval(playNext, 1000);
+
+    }
+    // 3.3点击 右箭头 显示下一张
+    var picIndex = 0;//pic表示当前图片的索引
+    var squareIndex = 0;//square表示当前按钮的索引
+    arrRight.onclick = function () {
+      picIndex++;
+      if (picIndex< ulLis.length) {
+        var target = -picIndex* imgWidth;   
+        animate(ul, target);
+      }else{
+        picIndex = 0;
+        ul.style.left = 0;
+      }
+
+      squareIndex++;
+      if (squareIndex < ulLis.length) {
+        //干掉所有小按钮
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        //留下我自己有current类名
+        olLis[squareIndex].className = "current";
+      }else{
+        squareIndex=0;
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        //留下我自己有current类名
+        olLis[squareIndex].className = "current";
+      } 
+    } 
+
+    // 3.4点击 左箭头 显示上一张
+    arrLeft.onclick = function () { 
+      picIndex--; 
+      squareIndex--;
+      if (picIndex >= 0) {
+        animate(ul, -picIndex * imgWidth);
+      }else{
+        picIndex=ulLis.length-1;
+        ul.style.left = -picIndex * imgWidth+'px';
+      }
+
+      if (squareIndex >= 0) {
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        olLis[squareIndex].className = "current";
+      }else{
+        squareIndex=ulLis.length-1;
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        olLis[squareIndex].className = "current";
+      }
+    }
+
+    //4.添加自动滚动
+    timer = setInterval(playNext, 1000)
+    function playNext(){
+      // 4.1图片自动滚动
+      picIndex++;
+      if (picIndex< ulLis.length) {
+        var target = -picIndex* imgWidth;   
+        animate(ul, target);
+      }else{
+        picIndex = 0;
+        ul.style.left = 0;
+      }
+
+      // 4.2索引小按钮自动滚动
+      squareIndex++;
+      if (squareIndex < olLis.length) {
+        //干掉所有小按钮
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        //留下我自己有current类名
+        olLis[squareIndex].className = "current";
+      }else{
+        squareIndex=0;
+        for (var i = 0; i < olLis.length; i++) {
+          olLis[i].className = "";
+        }
+        //留下我自己有current类名
+        olLis[squareIndex].className = "current";
+      } 
+    } 
+
+    
+    
+
+    function animate(obj, target) {
+        clearInterval(obj.timer);
+        obj.timer = setInterval(function () {
+            var step = 25;
+            //left值越小越靠左
+            //obj.offsetLeft小于target
+            //obj在target的左侧
+            //应该向右走
+            //向右走step是正
+            /*if (obj.offsetLeft < target) {
+             step = 25;
+             }
+             if (obj.offsetLeft > target) {
+             //向左走是负
+             step = -25;
+             }*/
+            var step = obj.offsetLeft < target ? step : -step;
+
+            //Math.abs(obj.offsetLeft - target) 这个表示对象到目标的距离
+            //如果对象到目标的距离比一步迈出的距离要大 我就要继续走
+
+            if (Math.abs(obj.offsetLeft - target) > Math.abs(step)) {
+                obj.style.left = obj.offsetLeft + step + "px";
+            } else {
+                //再迈一步就超过目标了
+                obj.style.left = target + "px";//手动把对象放置到目标上
+                clearInterval(obj.timer);//清理定时器
+            }
+        }, 15)
+    }
+
+  </script>
+</body>
+</html>
